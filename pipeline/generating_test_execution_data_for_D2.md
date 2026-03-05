@@ -1,6 +1,9 @@
 # Building libest on macOS and Collecting Unit Test Run Times
 
-This document describes how to build libest on macOS (with OpenSSL 3), run all unit tests, and produce a CSV of execution times per test. The process is designed to work from a **fresh clone** of the libest repository. Tests that crash are run in isolated processes and recorded with `time_sec=-1` so the full suite completes.
+This document describes how to build libest on macOS (with OpenSSL 3), run all unit tests, and produce a CSV of execution times per test. The process is designed to work from a **fresh clone** of the [libest](https://github.com/cisco/libest) repository.
+
+---
+**NOTE:** The original repository found [here](https://gitlab.com/SEMERU-Code-Public/Data/icse20-comet-data-replication-package/-/tree/main/LibEST?ref_type=heads) is a small snapshot of the [libest](https://github.com/cisco/libest) repository, which does not contain necessary files to build and execute the code. Consequently, we are using Cisco's official repository.
 
 ---
 
@@ -153,7 +156,7 @@ If configure or build fails, fix any missing dependencies (e.g. `safe_mem_lib.h`
 
 ## 6. Test runner: timing CSV and fork-per-test
 
-Two additions are needed so you can run all tests and write a CSV of run times, with crashing tests recorded as `-1` instead of stopping the run.
+Two additions are needed so you can run all tests and write a CSV of run times, with crashing tests are ignored instead of stopping the run.
 
 ### 6.1 Standalone Makefile for the test binary
 
@@ -210,7 +213,7 @@ CUNIT_DIR ?= /opt/homebrew
      - Flush after each line; close the file when done.
    - Else: keep the existing CUnit basic/verbose run and failure summary.
 
-This gives one CSV line per test; crashed tests get `time_sec=-1` and the rest get the measured time in seconds.
+This gives one CSV line per test and get the measured time in seconds.
 
 ---
 
@@ -247,7 +250,7 @@ Or write to a specific file (e.g. in the repo root or parent folder):
 
 - **Columns**: `suite`, `test`, `time_sec`.
 - **Header**: `suite,test,time_sec`
-- **Rows**: One per test case. `time_sec` is in seconds (decimal). Tests that crashed (e.g. signal) are recorded as `time_sec=-1`.
+- **Rows**: One per test case. `time_sec` is in seconds (decimal).
 - The file is flushed after each line so partial results are still valid if the runner is interrupted.
 
 ---

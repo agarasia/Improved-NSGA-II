@@ -37,7 +37,8 @@ pip install pandas openpyxl matplotlib seaborn
 
 - **Datasets** live in `datasets/` (e.g. `D1.xlsx`, `D2.xlsx`).
 - Each Excel file must contain columns that can be mapped to: `tc_id`, `us_id`, `tc_executiontime`, `us_businessvalue` (the pipeline converts Excel to CSV internally).
-- For D2, test execution data can be produced as described in `pipeline/generating_test_execution_data_for_D2.md`.
+- For D2, test execution data can be produced as described in `pipeline/generating_test_execution_data_for_D2.md`. The user story mappings to the test cases can be found [here](https://gitlab.com/SEMERU-Code-Public/Data/icse20-comet-data-replication-package/-/blob/main/LibEST/req_to_test_ground.txt?ref_type=heads).
+
 
 ---
 

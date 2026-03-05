@@ -1,0 +1,94 @@
+# Standalone Makefile to build libest CUnit test runner on macOS (from test/)
+# Usage: make -f Makefile.standalone
+# Run: ./runtest -timing-csv [optional_output.csv]
+TOP = ..
+SRC = UT/runtest.c \
+	UT/US748/us748.c \
+	UT/US893/us893.c \
+	UT/US894/us894.c \
+	UT/US895/us895.c \
+	UT/US896/us896.c \
+	UT/US897/us897.c \
+	UT/US898/us898.c \
+	UT/US899/us899.c \
+	UT/US900/us900.c \
+	UT/US901/us901.c \
+	UT/US902/us902.c \
+	UT/US903/us903.c \
+	UT/US1005/us1005.c \
+	UT/US1159/us1159.c \
+	UT/US1060/us1060.c \
+	UT/US1060/us1060c.c \
+	UT/US1190/us1190.c \
+	UT/US1864/us1864.c \
+	UT/US1883/us1883.c \
+	UT/US1884/us1884.c \
+	UT/US2174/us2174.c \
+	UT/US3496/us3496.c \
+	UT/US3512/us3512.c \
+	UT/US3612/us3612.c \
+	UT/US3646/us3646.c \
+	UT/US4020/us4020.c \
+	UT/US4710/us4710.c \
+	UT/US4778/us4778.c \
+	UT/US4784/us4784.c \
+	UT/US4752/us4752.c \
+	UT/US4880/us4880.c \
+	UT/US5052/us5052.c \
+	UT/US5121/us5121.c \
+	UT/US5139/us5139.c \
+	UT/US5184/us5184.c \
+	UT/US5213/us5213.c \
+	UT/US5226/us5226.c \
+	UT/US5230/us5230.c \
+	UT/US5237/us5237.c \
+	UT/US5240/us5240.c \
+	UT/US5241/us5241.c \
+	UT/US5244/us5244.c \
+	UT/US5246/us5246.c \
+	UT/US5248/us5248.c \
+	UT/US5255/us5255.c \
+	UT/US5282/us5282.c \
+	UT/US5331/us5331.c \
+	UT/US5357/us5357.c \
+	UT/US5367/us5367.c \
+	UT/US5394/us5394.c \
+	UT/US5399/us5399.c \
+	UT/US5418/us5418c.c \
+	UT/US5418/us5418h.c \
+	util/cdets.c \
+	util/curl_utils.c \
+	util/test_utils.c \
+	util/st_server.c \
+	util/st_proxy.c \
+	util/ossl_srv.c
+OBJ = $(SRC:.c=.o)
+OUT = runtest
+
+OPENSSL_DIR ?= /opt/homebrew/opt/openssl@3
+CUNIT_DIR ?= /opt/homebrew
+CURL_CC_DEFINE = -DHAVE_LIBCURL
+URIPARSER_LDFLAGS =
+LIBCOAP_DIR =
+CFLAGS += -D_DARWIN_C_SOURCE -D_GNU_SOURCE
+
+INCLUDES = -I$(TOP)/src/est -I$(TOP) -I$(TOP)/test/util -I$(TOP)/test/UT \
+	-I$(OPENSSL_DIR)/include -I$(CUNIT_DIR)/include
+CCFLAGS = -Wall -g -DHAVE_CUNIT -DNO_SSL_DL $(CURL_CC_DEFINE) $(CFLAGS)
+LDFLAGS = -lcunit -ldl -lpthread -lssl -lcrypto -lest -lcurl $(URIPARSER_LDFLAGS)
+LIBS = -L$(TOP)/src/est/.libs -L$(OPENSSL_DIR)/lib -L$(CUNIT_DIR)/lib $(LDFLAGS)
+CC = gcc
+
+.SUFFIXES: .c
+.PHONY: default clean
+
+default: $(OUT)
+
+.c.o:
+	$(CC) $(INCLUDES) $(CCFLAGS) -c $< -o $@
+
+$(OUT): $(OBJ)
+	$(CC) -o $(OUT) $(OBJ) $(LIBS)
+
+clean:
+	rm -f $(OBJ) $(OUT)
